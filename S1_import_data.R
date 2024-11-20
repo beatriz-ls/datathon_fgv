@@ -8,3 +8,5 @@ archives <- list.files("data", full.names = TRUE)
 
 dt <- rbindlist(lapply(archives, fread))
 
+saveRDS(dt, "data.rds")
+
