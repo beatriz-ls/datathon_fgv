@@ -1,5 +1,4 @@
 # libs
-
 library(tidymodels)
 library(ggplot2)
 library(broom)
@@ -8,25 +7,26 @@ library(janitor)
 library(cluster)
 library(factoextra)
 library(dtwclust)
+library(zoo)
 
 # load data
 
-dt <- readRDS("data.rds")
+dt <- readRDS("sample_data.rds")
 
+dt %>% head
+  
 # data pre processing
 
 dt <- dt %>% select(-symbol) %>%
-  mutate(date = as.POSIXct(date, format = "%Y-%m-%d %H:%M:%S")) %>%
   clean_names()
 
 dt_scale <- dt %>%
-  clean_names() %>%
   mutate(across(c(open, high, low, close, volume), scale)) %>%
   select(open, high, low, close, volume, name)
 
 ######## clusterização ---------------------------------------------------------
 
-dt_cluster <- dt_scale %>% select(-name)
+dt_cluster <- dt_scale %>% select(- c(name, ))
 
 # elbow graphic analisys
 
