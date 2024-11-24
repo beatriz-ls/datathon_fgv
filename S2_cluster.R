@@ -102,17 +102,73 @@ hc_dtw <- hclust(dist_matrix)
 plot(hc_dtw, main = "Dendrograma - Clusterização Hierárquica com DTW", 
      xlab = "Moedas", ylab = "Distância DTW")
 
-# Converter o dendrograma para um formato de plotly
+
+##### aplicação da clusterização
 
 num_clusters <- 5 
 
 # aplicar o k-means com DTW
-kmeans_result <- tsclust(
+partional_clust <- tsclust(
+                  t(dt_norm),
+                  type = "partitional",
+                  k = num_clusters,
+                  preproc = NULL,
+                  distance = "dtw_basic",
+                  centroid = "dba"
+                )
+
+# hierarquização
+
+control <- hierarchical_control(
+  method = "single",
+  symmetric = FALSE,
+  distmat = NULL
+)
+
+hierarchical_clust <- tsclust(
   t(dt_norm),
-  type = "partitional",
-  k = num_clusters,
+  type = "hierarchical",
   preproc = NULL,
   distance = "dtw_basic",
-  centroid = "dba"
+  control =  control
 )
+
+# Tadpoles
+
+# Parâmetros para testar
+window_sizes <- c(5, 10, 15)
+lps_methods <- c("lbk", "lbi")
+convergence_criteria <- c(0.01, 0.001)
+
+# Criando uma lista para armazenar os modelos
+tadpole_list <- list()
+
+# Função para testar combinações e armazenar os modelos
+counter <- 1  # Para numerar os modelos
+for (window in window_sizes) {
+  for (lb_method in lps_methods) {
+    for (dc in convergence_criteria) {
+      control_params <- tadpole_control(dc = dc, window.size = window, lb = lb_method)
+      
+      # Aplicando o modelo TADPOLES
+      set.seed(123)
+      model <- tsclust(t(dt_norm), type = "tadpole", k = 5, control = control_params)
+      
+      # Armazenando o modelo na lista
+      tadpole_list[[counter]] <- model
+      counter <- counter + 1
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
