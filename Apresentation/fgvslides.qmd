@@ -1,18 +1,22 @@
 ---
-title: "aaa"
+title: ""
 subtitle: ""
 institute: ""
 format: 
   revealjs:
+    css: mycss.css
+    incremental: true 
     footer: "Desafio FGV - Datacapixaba"
-    theme: default
+    theme: league
+    cssVariables:
+      --main-title-color: orange
     transition: slide
     title-slide-attributes: 
       data-background-image: Capa.jpg
       data-background-size: contain
       data-background-position: center
-       
-       
+    
+
 ---
 
 ```{r}
@@ -23,40 +27,62 @@ theme_set(theme_minimal())
 
 ```
 
-## INTRUDUÇÃO {background-image="marcarufes2_0.png"}
-
-Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado. O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado. 
 
 
-## MOTIVAÇÃO
+##  {background-image=Capa.jpg background-size=93% background-color=white}
+
+## <span style="color: orange;"> INTRODUÇÃO </span> {.smaller background-color=white } 
+
+. . . 
+
+Com o aumento da complexidade e da quantidade de dados disponíveis
+acerca das criptomoedas, métodos eficientes de agrupamento e modelagem
+preditiva tornam-se essenciais para identificar padrões e tendências que
+possam orientar investimentos e estratégias de mercado. 
+
+. . . 
+
+O presente trabalho busca fazer uma clusterização de séries temporais de diversas
+criptomoedas presentes no mercado.
+
+## <span style="color: orange;"> MOTIVAÇÃO </span> {.smaller background-color=white}   
+
 O principal objetivo deste estudo é:
 
-- Clusterizar as séries temporais das criptomoedas, segmentando-as em 4 clusters que agrupam séries com comportamentos similares
---
-- Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas
-...
-- Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller Aumentado como critério de seleção
-...
-- Realizar uma análise descritiva final dos resultados dos modelos preditivos
+-  Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares
 
+-   Criar séries temporais representativas para cada cluster por meio da
+    média simples das séries agrupadas 
 
-## METODOLOGIA
+-   Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se
+    adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller
+    Aumentado como critério de seleção 
 
--Escolha de uma base de dados com intervalos de tempo parecidos
-...
--Seleção da janela temporal (24/05/2022 até 22/11/2024)
+-   Realizar uma análise descritiva final dos resultados dos modelos
+    preditivos
 
--Aplicação do algoritmo k-means para dividir as séries temporais das criptomoedas em 4 clusters
-...
--Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster
-...
--Aplicação dos modelos ARIMA e ARMA às séries representativas
-...
--Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster
+## <span style="color: orange;"> METODOLOGIA </span> {.smaller background-color=white}
 
-## RESULTADOS
+- Escolha de uma base de dados com intervalos de tempo parecidos 
 
+- Seleção da janela temporal (24/05/2022 até 22/11/2024)
 
-## CONCLUSÕES
+- Aplicação do algoritmo <span style="color: orange;">***k-means***</span> para dividir as séries temporais das
+criptomoedas em 5 clusters
 
+- Para cada cluster, será criada uma série
+temporal representativa através da média simples das séries pertencentes
+ao cluster
 
+- Aplicação dos modelos <span style="color: orange;">ARIMA e ARMA</span> às séries
+representativas 
+
+- Utilização do Teste de Dickey-Fuller Aumentado para
+verificar a estacionariedade e decidir qual modelo se adequa melhor a
+cada cluster
+
+## <span style="color: orange;"> RESULTADOS </span> {.smaller background-color=white}
+
+knitr::kable(x = head(dados_soma), format = "html")
+
+## <span style="color: orange;"> CONCLUSÕES </span> {.smaller background-color=white}

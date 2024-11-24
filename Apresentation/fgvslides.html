@@ -7,10 +7,10 @@
 <link href="fgvslides_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="fgvslides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="fgvslides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="fgvslides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<link href="fgvslides_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
-  <title>aaa</title>
+  <title>fgvslides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -30,6 +30,7 @@
     }
   </style>
   <link rel="stylesheet" href="fgvslides_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="mycss.css">
   <link href="fgvslides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="fgvslides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="fgvslides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -320,41 +321,50 @@
     }
   </style>
 </head>
-<body class="quarto-light">
+<body class="quarto-dark">
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-image="Capa.jpg" data-background-position="center" data-background-size="contain" class="quarto-title-block center">
-  <h1 class="title">aaa</h1>
 
-<div class="quarto-title-authors">
+<section id="section" class="slide level2" data-background-image="Capa.jpg" data-background-size="93%" data-background-color="white">
+<h2></h2>
+</section>
+<section id="introdução" class="slide level2 smaller" data-background-color="white">
+<h2><span style="color: orange;"> INTRODUÇÃO </span></h2>
+<div class="fragment">
+<p>Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado.</p>
 </div>
-
+<div class="fragment">
+<p>O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado.</p>
+</div>
 </section>
-<section id="intrudução" class="slide level2" data-background-image="marcarufes2_0.png">
-<h2>INTRUDUÇÃO</h2>
-<p>Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado. O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado.</p>
-</section>
-<section id="motivação" class="slide level2">
-<h2>MOTIVAÇÃO</h2>
+<section id="motivação" class="slide level2 smaller" data-background-color="white">
+<h2><span style="color: orange;"> MOTIVAÇÃO </span></h2>
 <p>O principal objetivo deste estudo é:</p>
 <ul>
-<li><h2 id="clusterizar-as-séries-temporais-das-criptomoedas-segmentando-as-em-4-clusters-que-agrupam-séries-com-comportamentos-similares">Clusterizar as séries temporais das criptomoedas, segmentando-as em 4 clusters que agrupam séries com comportamentos similares</h2></li>
-<li>Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas …</li>
-<li>Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller Aumentado como critério de seleção …</li>
-<li>Realizar uma análise descritiva final dos resultados dos modelos preditivos</li>
+<li class="fragment"><p>Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares</p></li>
+<li class="fragment"><p>Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas</p></li>
+<li class="fragment"><p>Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller Aumentado como critério de seleção</p></li>
+<li class="fragment"><p>Realizar uma análise descritiva final dos resultados dos modelos preditivos</p></li>
 </ul>
 </section>
-<section id="metodologia" class="slide level2">
-<h2>METODOLOGIA</h2>
-<p>-Escolha de uma base de dados com intervalos de tempo parecidos … -Seleção da janela temporal (24/05/2022 até 22/11/2024)</p>
-<p>-Aplicação do algoritmo k-means para dividir as séries temporais das criptomoedas em 4 clusters … -Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster … -Aplicação dos modelos ARIMA e ARMA às séries representativas … -Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster</p>
+<section id="metodologia" class="slide level2 smaller" data-background-color="white">
+<h2><span style="color: orange;"> METODOLOGIA </span></h2>
+<ul>
+<li class="fragment"><p>Escolha de uma base de dados com intervalos de tempo parecidos</p></li>
+<li class="fragment"><p>Seleção da janela temporal (24/05/2022 até 22/11/2024)</p></li>
+<li class="fragment"><p>Aplicação do algoritmo <span style="color: orange;"><strong><em>k-means</em></strong></span> para dividir as séries temporais das criptomoedas em 5 clusters</p></li>
+<li class="fragment"><p>Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster</p></li>
+<li class="fragment"><p>Aplicação dos modelos <span style="color: orange;">ARIMA e ARMA</span> às séries representativas</p></li>
+<li class="fragment"><p>Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster</p></li>
+</ul>
 </section>
-<section id="resultados" class="slide level2">
-<h2>RESULTADOS</h2>
+<section id="resultados" class="slide level2 smaller" data-background-color="white">
+<h2><span style="color: orange;"> RESULTADOS </span></h2>
+<p>knitr::kable(x = head(dados_soma), format = “html”)</p>
 </section>
-<section id="conclusões" class="slide level2">
-<h2>CONCLUSÕES</h2>
+<section id="conclusões" class="slide level2 smaller" data-background-color="white">
+<h2><span style="color: orange;"> CONCLUSÕES </span></h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 <p>Desafio FGV - Datacapixaba</p>
