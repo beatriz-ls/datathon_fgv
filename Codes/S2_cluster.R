@@ -10,7 +10,7 @@ library(plotly)
 
 # load data
 
-dt <- readRDS("short_data.rds")
+dt <- readRDS("Codes/short_data.rds")
 
 # data preprocessing
 
@@ -105,9 +105,13 @@ plot(hc_dtw, main = "Dendrograma - Clusterização Hierárquica com DTW",
 
 ##### aplicação da clusterização
 
-num_clusters <- 5 
+num_clusters <- 5
+
 
 # aplicar o k-means com DTW
+
+set.seed(123)
+
 partional_clust <- tsclust(
                   t(dt_norm),
                   type = "partitional",
@@ -117,58 +121,108 @@ partional_clust <- tsclust(
                   centroid = "dba"
                 )
 
-# hierarquização
 
-control <- hierarchical_control(
-  method = "single",
-  symmetric = FALSE,
-  distmat = NULL
-)
+# Testando multiplos modelos 
 
-hierarchical_clust <- tsclust(
-  t(dt_norm),
-  type = "hierarchical",
-  preproc = NULL,
-  distance = "dtw_basic",
-  control =  control
-)
+## Parâmetros
+num_clusters <- 5
+n_runs <- 10
+min_cluster_size <- 8
 
-# Tadpoles
+# Armazenar resultados
+best_model <- NULL
+best_distance <- Inf  # Inicialmente, a distância é infinita
 
-# Parâmetros para testar
-window_sizes <- c(5, 10, 15)
-lps_methods <- c("lbk", "lbi")
-convergence_criteria <- c(0.01, 0.001)
-
-# Criando uma lista para armazenar os modelos
-tadpole_list <- list()
-
-# Função para testar combinações e armazenar os modelos
-counter <- 1  # Para numerar os modelos
-for (window in window_sizes) {
-  for (lb_method in lps_methods) {
-    for (dc in convergence_criteria) {
-      control_params <- tadpole_control(dc = dc, window.size = window, lb = lb_method)
-      
-      # Aplicando o modelo TADPOLES
-      set.seed(123)
-      model <- tsclust(t(dt_norm), type = "tadpole", k = 5, control = control_params)
-      
-      # Armazenando o modelo na lista
-      tadpole_list[[counter]] <- model
-      counter <- counter + 1
+# Loop para testar múltiplas inicializações
+for (i in 1:n_runs) {
+  cat("Rodando modelo", i, "...\n")
+  
+  # Executa o modelo sem set.seed() para inicializações variadas
+  current_model <- tsclust(
+    t(dt_norm),
+    type = "partitional",
+    k = num_clusters,
+    preproc = NULL,
+    distance = "dtw_basic",
+    centroid = "dba"
+  )
+  
+  # Verifica se todos os clusters têm o tamanho mínimo
+  cluster_sizes <- current_model@clusinfo$size
+  if (all(cluster_sizes >= min_cluster_size)) {
+    # Calcula a média das distâncias intra-cluster
+    current_distance <- mean(current_model@clusinfo$av_dist)
+    
+    # Verifica se é o melhor modelo até agora
+    if (current_distance < best_distance) {
+      best_model <- current_model
+      best_distance <- current_distance
     }
+  } else {
+    cat("Modelo descartado devido a clusters com tamanho menor que", min_cluster_size, "\n")
   }
 }
 
+# Resultado final
+if (!is.null(best_model)) {
+  cat("Melhor modelo encontrado com média de distância intra-cluster:", best_distance, "\n")
+  print(best_model)
+} else {
+  cat("Nenhum modelo atendeu ao critério de tamanho mínimo por cluster.\n")
+}
+
+saveRDS(best_model, "Codes/cluster_selecionado.rds")
+
+# associando cluster para cada moeda
+
+moeda_cluster <- data.frame(
+  ticker = colnames(dt_norm),
+  cluster = best_model@cluster
+)
+
+ggplot(moeda_cluster, aes(x = factor(cluster), y = ticker)) +
+  geom_text(aes(label = ticker), position = position_dodge(width = 0.9)) +
+  labs(
+    title = "Moedas por Cluster",
+    x = "Cluster",
+    y = "Moedas"
+  ) +
+  theme_minimal() +
+  theme(axis.text.y = element_blank())
+
+# gráficos de clusters
+
+dt_aux <- dt %>% 
+  select(-c("high", "low", "open")) %>%
+  left_join(moeda_cluster, by = "ticker") %>%
+  mutate(close_norm = scale(close),
+         close_minimax = scale((close - min(close)) / (max(close) - min(close)) * 2 - 1))
+
+# Normalização min-max
+dt_aux$normalized_close <- (dt_aux$close - min(dt_aux$close)) / (max(dt_aux$close) - min(dt_aux$close)) * 2 - 1
+
+#saveRDS(dt_aux, "clustered_data.rds")
+
+ggplot(dt_aux, aes(x = date, y = close_norm, group = ticker,
+                   color = as.factor(cluster))) +
+  geom_line() +
+  facet_wrap(~ cluster, scales = "free_y", ncol = 1) +
+  theme_minimal() +
+  labs(title = "Séries Temporais por Cluster",
+       x = "Tempo",
+       y = "Valor",
+       color = "Cluster")
 
 
-
-
-
-
-
-
+for (cl in unique(dt_aux$cluster)) {
+  p <- ggplot(subset(dt_aux, cluster == cl), aes(x = date, y = close_norm)) +
+    geom_line() +
+    labs(title = paste("Cluster", cl),
+         x = "Tempo",
+         y = "Valor Normalizado") +
+    theme_minimal()
+ print(p) 
+}
 
 
 
