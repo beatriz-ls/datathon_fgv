@@ -1,0 +1,59 @@
+---
+title: " aaa "
+subtitle: " "
+institute: "  "
+format: 
+   revealjs:
+     footer: "Desafio FGV - Datacapixaba" 
+     theme: default
+     transition: slide
+     title-slide-attributes: 
+       data-background-image: capa2.jpg
+       data-background-size: 93%
+---
+
+```{r}
+library(tidyverse)
+library(gt)
+library(readxl)
+theme_set(theme_minimal())
+
+```
+
+## INTRUDUÇÃO {background-image="marcarufes2_0.png"}
+
+Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado. O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado. 
+
+
+## MOTIVAÇÃO
+O principal objetivo deste estudo é:
+
+- Clusterizar as séries temporais das criptomoedas, segmentando-as em 4 clusters que agrupam séries com comportamentos similares
+--
+- Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas
+...
+- Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller Aumentado como critério de seleção
+...
+- Realizar uma análise descritiva final dos resultados dos modelos preditivos
+
+
+## METODOLOGIA
+
+-Escolha de uma base de dados com intervalos de tempo parecidos
+...
+-Seleção da janela temporal (24/05/2022 até 22/11/2024)
+
+-Aplicação do algoritmo k-means para dividir as séries temporais das criptomoedas em 4 clusters
+...
+-Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster
+...
+-Aplicação dos modelos ARIMA e ARMA às séries representativas
+...
+-Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster
+
+## RESULTADOS
+
+
+## CONCLUSÕES
+
+
