@@ -7,7 +7,7 @@ library(ggplot2)
 library(writexl)
 
 # ler base de dados
-dt <- readRDS("short_data.rds")
+dt <- readRDS("Codes/short_data.rds")
 
 #-------- obter o número de observações por moeda no decorrer dos anos
 
