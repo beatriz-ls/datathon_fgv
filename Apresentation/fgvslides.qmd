@@ -1,15 +1,18 @@
 ---
-title: " aaa "
-subtitle: " "
-institute: "  "
+title: "aaa"
+subtitle: ""
+institute: ""
 format: 
-   revealjs:
-     footer: "Desafio FGV - Datacapixaba" 
-     theme: default
-     transition: slide
-     title-slide-attributes: 
-       data-background-image: capa2.jpg
-       data-background-size: 93%
+  revealjs:
+    footer: "Desafio FGV - Datacapixaba"
+    theme: default
+    transition: slide
+    title-slide-attributes: 
+      data-background-image: Capa.jpg
+      data-background-size: contain
+      data-background-position: center
+       
+       
 ---
 
 ```{r}
