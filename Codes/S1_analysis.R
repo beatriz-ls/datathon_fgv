@@ -29,9 +29,9 @@ dt_dia$ano_mes %>% table()
 
 # exploratória 
 
-dt$ticker %>% unique() %>% length() # 109 cripto moedas
+dt$name %>% unique() %>% length() # 109 cripto moedas
  
-dt$ticker %>% table %>% min
+dt$date %>% table %>% min
 
 # geral
 
@@ -40,7 +40,7 @@ dt$date %>% min()
 
 # plot de informações -----------------------------------------------------
 
-dt_bicoin <- dt %>% filter(ticker == "BTC") # bitcoin
+dt_bicoin <- dt %>% filter(name == "Bitcoin") # bitcoin
 
 dt %>% as.data.frame() %>% mutate(date = as.Date(date))
 
