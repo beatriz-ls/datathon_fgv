@@ -1,114 +1,118 @@
 # libs
-library(tidymodels)
-library(ggplot2)
-library(broom)
+
 library(dplyr)
-library(janitor)
-library(cluster)
-library(factoextra)
 library(dtwclust)
+library(tidyr)
 library(zoo)
+library(tidymodels)
+library(dtw)
+library(plotly)
 
 # load data
 
-dt <- readRDS("sample_data.rds")
+dt <- readRDS("short_data.rds")
 
-dt %>% head
-  
-# data pre processing
+# data preprocessing
 
-dt <- dt %>% select(-symbol) %>%
-  clean_names()
+dt_wide <- dt %>%
+  select(date, ticker, close) %>%
+  pivot_wider(
+    names_from = ticker,
+    values_from = close 
+  )
 
-dt_scale <- dt %>%
-  mutate(across(c(open, high, low, close, volume), scale)) %>%
-  select(open, high, low, close, volume, name)
+# analise de dados faltantes
 
-######## clusterização ---------------------------------------------------------
+any(is.na(dt_wide))
 
-dt_cluster <- dt_scale %>% select(- c(name, ))
+sum(is.na(dt_wide))
+
+colSums(is.na(dt_wide))
+
+# Criar todas as combinações possíveis de `date` e `ticker`
+comb_full <- expand.grid(
+  date = unique(dt$date),
+  ticker = unique(dt$ticker)
+)
+
+comb_missing <- anti_join(comb_full, dt, by = c("date", "ticker"))
+print(comb_missing)
+
+# substituindo dados faltantes com aproximandos
+
+dt_wide <- dt_wide %>%
+  arrange(date) %>%
+  fill(everything(), .direction = "down") 
+
+# normalizando os dados
+
+dt_norm <- scale(dt_wide[,-1])
+
+#### definindo números de k para clusterização
+
+set.seed(123)
 
 # elbow graphic analisys
 
-set.seed(123)
 wss <- map_dbl(1:10, function(k) {
-  kmeans(dt_cluster, centers = k, nstart = 10)$tot.withinss
+  kmeans(dt_norm, centers = k, nstart = 10)$tot.withinss
 })
 
 df_wss <- data.frame(k = 1:10, wss = wss)
 
 elbow_graph <- ggplot(df_wss, aes(x = k, y = wss)) +
-                  geom_point(shape = 19, size = 3, color = "blue") +
-                  geom_line(color = "blue", linewidth = 1) +
-                  labs(
-                    x = "Número de Clusters (k)",
-                    y = "Soma dos Quadrados Intra-Cluster (WSS)",
-                    title = "Método do Cotovelo"
-                  ) +
-                  theme_minimal() +
-                  theme(
-                    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
-                    axis.title = element_text(size = 12)
-                  ) # obs: 4 clusters?
-
-#ggsave("grafico_cotovelo.png", plot = elbow_graph,
-#       width = 7, height = 5, dpi = 300)
+  geom_point(shape = 19, size = 3, color = "blue") +
+  geom_line(color = "blue", linewidth = 1) +
+  labs(
+    x = "Número de Clusters (k)",
+    y = "Soma dos Quadrados Intra-Cluster (WSS)",
+    title = "Método do Cotovelo"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    axis.title = element_text(size = 12)
+  ) # obs: 4 clusters?
 
 
-######## clusterização para series temporais -----------------------------------
+# índice de silhueta
 
-dt_cluster <- dt %>%
-  select(date, close, name) %>%
-  arrange(name, date)
-
-# Criar séries temporais por moeda
-cluster_list <- dt_cluster %>%
-  group_by(name) %>%
-  summarise(
-    series = list(close),
-    .groups = "drop"
-  )
-
-# por praticidade computacional amostrar 48 moedas
-cluster_list <- cluster_list %>%
-  slice_sample(n = 48)
-
-# todas as séries tem que ter o mesmo comprimento
-max_length <- max(sapply(cluster_list$series, length))
-cluster_list$series <- lapply(cluster_list$series, function(series) {
-  if (length(series) < max_length) {
-    c(series, rep(NA, max_length - length(series)))
-  } else {
-    series
-  }
+silhouette_scores <- sapply(2:10, function(k) {
+  kmeans_result <- kmeans(dt_norm, centers = k, nstart = 25)
+  silhouette_score <- silhouette(kmeans_result$cluster, dist(dt_norm))
+  mean(silhouette_score[, 3])  # Média do índice de silhueta
 })
 
-# trocando valores ausentes (NA) por zero ou interpolação
-cluster_list$series <- lapply(cluster_list$series, function(series) {
-  zoo::na.approx(series, na.rm = FALSE, rule = 2)
-})
+plot(2:10, silhouette_scores, type = "b", pch = 19, frame = FALSE,
+     xlab = "Número de Clusters", ylab = "Índice de Silhueta Médio",
+     main = "Escolha do Número de Clusters - Índice de Silhueta")
 
-# normalizando os dados
-cluster_list$series <- lapply(cluster_list$series, function(series) {
-  scale(series, center = TRUE, scale = TRUE)
-})
+# método hierarquico
 
-set.seed(123)
+dt_wide_aux <- dt_wide %>%
+  select(-date)
 
-# Número de clusters
-num_clusters <- 4 
+# Calcular a matriz de distância Euclidiana entre as moedas
+dist_matrix <- dist(t(dt_wide_aux), method = "DTW")  
 
-# Aplicar o k-means com DTW
+# Realizar a clusterização hierárquica diretamente com o método "dtw"
+hc_dtw <- hclust(dist_matrix)
+
+# Visualizar o dendrograma
+plot(hc_dtw, main = "Dendrograma - Clusterização Hierárquica com DTW", 
+     xlab = "Moedas", ylab = "Distância DTW")
+
+# Converter o dendrograma para um formato de plotly
+
+num_clusters <- 5 
+
+# aplicar o k-means com DTW
 kmeans_result <- tsclust(
-  cluster_list$series,
+  t(dt_norm),
   type = "partitional",
   k = num_clusters,
   preproc = NULL,
   distance = "dtw_basic",
   centroid = "dba"
 )
-
-
-
-
 
