@@ -329,27 +329,71 @@
 <section id="section" class="slide level2" data-background-image="Capa.jpg" data-background-size="93%" data-background-color="white">
 <h2></h2>
 </section>
-<section id="introdução" class="slide level2 smaller" data-background-color="white">
-<h2><span style="color: orange;"> INTRODUÇÃO </span></h2>
+<section id="introdução" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
+<h2><span style="color: orange;">INTRODUÇÃO</span></h2>
 <div class="fragment">
 <p>Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado.</p>
 </div>
 <div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">ticker</th>
+<th style="text-align: right;">ano</th>
+<th style="text-align: right;">contagem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1INCH</td>
+<td style="text-align: right;">2022</td>
+<td style="text-align: right;">222</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1INCH</td>
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1INCH</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">327</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AAVE</td>
+<td style="text-align: right;">2022</td>
+<td style="text-align: right;">222</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AAVE</td>
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AAVE</td>
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">327</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado.</p>
 </div>
 </section>
-<section id="motivação" class="slide level2 smaller" data-background-color="white">
-<h2><span style="color: orange;"> MOTIVAÇÃO </span></h2>
+<section id="motivação" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
+<h2><span style="color: orange;">MOTIVAÇÃO</span></h2>
 <p>O principal objetivo deste estudo é:</p>
 <ul>
 <li class="fragment"><p>Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares</p></li>
 <li class="fragment"><p>Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas</p></li>
-<li class="fragment"><p>Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller Aumentado como critério de seleção</p></li>
 <li class="fragment"><p>Realizar uma análise descritiva final dos resultados dos modelos preditivos</p></li>
 </ul>
 </section>
-<section id="metodologia" class="slide level2 smaller" data-background-color="white">
-<h2><span style="color: orange;"> METODOLOGIA </span></h2>
+<section id="metodologia" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
+<h2><span style="color: orange;">METODOLOGIA</span></h2>
 <ul>
 <li class="fragment"><p>Escolha de uma base de dados com intervalos de tempo parecidos</p></li>
 <li class="fragment"><p>Seleção da janela temporal (24/05/2022 até 22/11/2024)</p></li>
@@ -359,12 +403,19 @@
 <li class="fragment"><p>Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster</p></li>
 </ul>
 </section>
-<section id="resultados" class="slide level2 smaller" data-background-color="white">
-<h2><span style="color: orange;"> RESULTADOS </span></h2>
-<p>knitr::kable(tabela_medias)</p>
+<section id="resultados" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
+<h2><span style="color: orange;">RESULTADOS</span></h2>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p>write_xlsx(tabela_medias, “tabela_medias.xlsx”)</p>
+</div><div class="column" style="width:33%;">
+
+</div><div class="column" style="width:33%;">
+<p>dsadsadasdsada</p>
+</div></div>
 </section>
-<section id="conclusões" class="slide level2 smaller" data-background-color="white">
-<h2><span style="color: orange;"> CONCLUSÕES </span></h2>
+<section id="conclusões" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
+<h2><span style="color: orange;">CONCLUSÕES</span></h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 <p>Desafio FGV - Datacapixaba</p>

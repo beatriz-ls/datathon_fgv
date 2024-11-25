@@ -15,29 +15,34 @@ format:
       data-background-image: Capa.jpg
       data-background-size: contain
       data-background-position: center
-    
-
 ---
 
 ```{r}
 library(tidyverse)
 library(gt)
 library(readxl)
-theme_set(theme_minimal())
-
-```
-
-```{r2}
-   #libs
-
 library(dplyr)
 library(readr)
 library(lubridate)  
 library(ggplot2)
 library(writexl)
+library(knitr)
+theme_set(theme_minimal())
 
-# ler base de dados
-dt <- readRDS("Codes/short_data.rds")
+```
+
+##  {background-image="Capa.jpg" background-size="93%" background-color="white"}
+
+## [ INTRODUÇÃO ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
+
+. . .
+
+Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado.
+
+
+. . .
+```{r}
+dt <- readRDS("C:/Users/gabri/Documents/datathon_fgv/Codes/short_data.rds")
 
 #-------- obter o número de observações por moeda no decorrer dos anos
 
@@ -55,191 +60,56 @@ num_observacoes <- dt %>%
   summarise(contagem = n()) %>%
   arrange(ticker, ano)
 
-# Visualizar a tabela resultante
-print(num_observacoes)
-
-# Gráfico de series mostrando a contagem de observações por ano para cada ticker
-series_moedas_ano <- ggplot(num_observacoes, aes(x = ano, y = contagem, color = ticker, group = ticker)) +
-  geom_line(size = 1) +  # Adiciona as linhas
-  geom_point(size = 2) + # Adiciona pontos para marcar os valores
-  labs(
-    title = "Contagem de Observações por Moeda ao Longo dos Anos",
-    x = "Ano",
-    y = "Número de Observações",
-    color = "Ticker"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 9),
-    axis.title = element_text(size = 6),
-    axis.text.x = element_text(size = 5), 
-    axis.text.y = element_text(size = 5),
-    legend.title = element_text(size = 6),
-    legend.text = element_text(size = 4)
-  ) +
-  theme(legend.position = "none")
-
-ggsave("graficos/series_moedas_ano.png", plot = series_moedas_ano)
-
-
-#-------- obter tabela com a media das variaveis high, low, open e close + variancia
-
-# Criar a tabela de médias para cada moeda
-tabela_medias <- dt %>%
-  group_by(ticker) %>% # Agrupar por moeda
-  summarise(
-    media_high = round(mean(high, na.rm = TRUE), 4), # Média de 'high', ignorando valores NA
-    mediana_high = round(median(high, na.rm = TRUE), 4),
-    variancia_high = round(var(high, na.rm = TRUE), 2),
-    media_low = round(mean(low, na.rm = TRUE), 4), # Média de 'low'
-    mediana_low = round(median(low, na.rm = TRUE), 4),
-    media_open = round(mean(open, na.rm = TRUE), 4), # Média de 'open'
-    mediana_open = round(median(open, na.rm = TRUE), 4),
-    media_close = round(mean(close, na.rm = TRUE), 4), # Média de 'close'
-    mediana_close = round(median(close, na.rm = TRUE), 4),
-    variancia_close = round(var(close, na.rm = TRUE), 2)         # Variância de 'close'
-  )
-
-# Visualizar a tabela resultante
-print(tabela_medias)
-
-
-write_xlsx(tabela_medias, "tabela_medias.xlsx")
-
-#-------------- grafico de series com as 3 criptos com maiores medias de preço e as 3 com menor media de preço
-
-# 1. Calcular a média de preço (close) para cada criptomoeda
-medias_precos <- dt %>%
-  group_by(ticker) %>%
-  summarise(media_preco = mean(close, na.rm = TRUE)) %>%
-  arrange(desc(media_preco))
-
-# 2. Selecionar as 3 criptomoedas com maior e menor média de preço usando slice_max e slice_min
-top3_mais_caro <- medias_precos %>% slice_max(order_by = media_preco, n = 3, with_ties = FALSE)
-top3_mais_barato <- medias_precos %>% slice_min(order_by = media_preco, n = 3, with_ties = FALSE)
-
-# Combinar as 3 mais caras e as 3 mais baratas
-selecao_tickers <- bind_rows(top3_mais_caro, top3_mais_barato)
-
-# Verificar se há 6 tickers únicos
-selecao_tickers <- selecao_tickers %>% distinct(ticker, .keep_all = TRUE)
-
-# 3. Filtrar os dados para incluir apenas as criptos selecionadas
-dt_caro_barato <- dt %>%
-  filter(ticker %in% selecao_tickers$ticker)
-
-# 4. Plotar o gráfico de séries temporais
-series_caro_barato <- ggplot(dt_caro_barato, aes(x = date, y = close, color = ticker, group = ticker)) +
-  geom_line(size = 1) +
-  labs(
-    title = "Preços das 3 Criptomoedas Mais Caras e Mais Baratas ao Longo dos Anos",
-    x = "Ano",
-    y = "Preço de Fechamento",
-    color = "Ticker"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 9),
-    axis.title = element_text(size = 6),
-    axis.text.x = element_text(size = 5), 
-    axis.text.y = element_text(size = 5),
-    legend.title = element_text(size = 6),
-    legend.text = element_text(size = 4)
-  )
-
-
-ggsave("graficos/series_caro_barato.png", plot = series_caro_barato)
-
-
-#--------- calcular preço medio por ano de fechamento
-
-
-# Calcular o preço médio por ano
-preco_anual <- dt %>%
-  group_by(ticker, ano) %>%
-  summarise(media_close = mean(close, na.rm = TRUE))
-
-# Gráfico de tendências
-series_preço_ano_moeda <- ggplot(preco_anual, aes(x = ano, y = media_close, color = ticker, group = ticker)) +
-  geom_line(size = 1) +
-  labs(
-    title = "Tendências do Preço Médio de Fechamento por Moeda",
-    x = "Ano",
-    y = "Preço Médio de Fechamento",
-    color = "Ticker"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 9),
-    axis.title = element_text(size = 6),
-    axis.text.x = element_text(size = 5), 
-    axis.text.y = element_text(size = 5),
-    legend.title = element_text(size = 6),
-    legend.text = element_text(size = 4),
-    legend.spacing.y = unit(0.005, "cm")
-  ) +
-  theme(legend.position = "none") 
-
-ggsave("graficos/series_preço_ano_moeda.png", plot = series_preço_ano_moeda)
-
-
-
+kable(head(num_observacoes))
 ```
 
-##  {background-image=Capa.jpg background-size=93% background-color=white}
 
-## <span style="color: orange;"> INTRODUÇÃO </span> {.smaller background-color=white } 
 
-. . . 
+O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado.
 
-Com o aumento da complexidade e da quantidade de dados disponíveis
-acerca das criptomoedas, métodos eficientes de agrupamento e modelagem
-preditiva tornam-se essenciais para identificar padrões e tendências que
-possam orientar investimentos e estratégias de mercado. 
 
-. . . 
 
-O presente trabalho busca fazer uma clusterização de séries temporais de diversas
-criptomoedas presentes no mercado.
-
-## <span style="color: orange;"> MOTIVAÇÃO </span> {.smaller background-color=white}   
+## [ MOTIVAÇÃO ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
 
 O principal objetivo deste estudo é:
 
--  Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares
+-   Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares
 
--   Criar séries temporais representativas para cada cluster por meio da
-    média simples das séries agrupadas 
+-   Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas
 
--   Comparar modelos preditivos (ARIMA e ARMA) para determinar qual se
-    adequa melhor a cada cluster, utilizando o Teste de Dickey-Fuller
-    Aumentado como critério de seleção 
 
--   Realizar uma análise descritiva final dos resultados dos modelos
-    preditivos
 
-## <span style="color: orange;"> METODOLOGIA </span> {.smaller background-color=white}
+-   Realizar uma análise descritiva final dos resultados dos modelos preditivos
 
-- Escolha de uma base de dados com intervalos de tempo parecidos 
+## [ METODOLOGIA ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
 
-- Seleção da janela temporal (24/05/2022 até 22/11/2024)
+-   Escolha de uma base de dados com intervalos de tempo parecidos
 
-- Aplicação do algoritmo <span style="color: orange;">***k-means***</span> para dividir as séries temporais das
-criptomoedas em 5 clusters
+-   Seleção da janela temporal (24/05/2022 até 22/11/2024)
 
-- Para cada cluster, será criada uma série
-temporal representativa através da média simples das séries pertencentes
-ao cluster
+-   Aplicação do algoritmo [***k-means***]{style="color: orange;"} para dividir as séries temporais das criptomoedas em 5 clusters
 
-- Aplicação dos modelos <span style="color: orange;">ARIMA e ARMA</span> às séries
-representativas 
+-   Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster
 
-- Utilização do Teste de Dickey-Fuller Aumentado para
-verificar a estacionariedade e decidir qual modelo se adequa melhor a
-cada cluster
+-   Aplicação dos modelos [ARIMA e ARMA]{style="color: orange;"} às séries representativas
 
-## <span style="color: orange;"> RESULTADOS </span> {.smaller background-color=white}
+-   Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster
 
-knitr::kable(tabela_medias)
+## [ RESULTADOS ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
 
-## <span style="color: orange;"> CONCLUSÕES </span> {.smaller background-color=white}
+:::::: columns
+::: {.column width="33%"}
+write_xlsx(tabela_medias, "tabela_medias.xlsx")
+:::
+
+::: {.column width="33%"}
+
+:::
+
+
+::: {.column width="33%"}
+dsadsadasdsada
+:::
+::::::
+
+## [ CONCLUSÕES ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
