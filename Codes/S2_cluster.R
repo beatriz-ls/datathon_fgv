@@ -180,15 +180,26 @@ moeda_cluster <- data.frame(
   cluster = best_model@cluster
 )
 
-ggplot(moeda_cluster, aes(x = factor(cluster), y = ticker)) +
-  geom_text(aes(label = ticker), position = position_dodge(width = 0.9)) +
+g_moeda_cluster <- ggplot(moeda_cluster, aes(x = factor(cluster), y = ticker)) +
+  geom_text(
+    aes(label = ticker, color = factor(cluster)), 
+    position = position_dodge(width = 0.9),
+    size = 1
+  ) +
   labs(
     title = "Moedas por Cluster",
     x = "Cluster",
-    y = "Moedas"
+    y = "Moedas",
+    color = "CLUSTER"
   ) +
   theme_minimal() +
-  theme(axis.text.y = element_blank())
+  theme(
+    axis.text.y = element_blank(),
+    legend.title = element_text(size = 2), # Ajusta o tamanho do título da legenda
+    legend.text = element_text(size = 25)   # Ajusta o tamanho do texto na legenda
+        )
+
+ggsave("graficos/g_moeda_cluster.png", plot = g_moeda_cluster)
 
 # gráficos de clusters
 
@@ -223,6 +234,4 @@ for (cl in unique(dt_aux$cluster)) {
     theme_minimal()
  print(p) 
 }
-
-
 
