@@ -7,8 +7,8 @@
 <link href="fgvslides_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="fgvslides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="fgvslides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="fgvslides_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.57">
+<link href="fgvslides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.450">
 
   <title>fgvslides</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -156,8 +156,7 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    padding-bottom: 0.5rem;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -321,7 +320,7 @@
     }
   </style>
 </head>
-<body class="quarto-dark">
+<body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
@@ -329,15 +328,15 @@
 <section id="section" class="slide level2" data-background-image="Capa.jpg" data-background-size="93%" data-background-color="white">
 <h2></h2>
 </section>
-<section id="introdução" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
-<h2><span style="color: orange;">INTRODUÇÃO</span></h2>
+<section id="motivação" class="slide level2 smaller">
+<h2><span style="color: orange;">MOTIVAÇÃO</span></h2>
 <div class="fragment">
 <p>Com o aumento da complexidade e da quantidade de dados disponíveis acerca das criptomoedas, métodos eficientes de agrupamento e modelagem preditiva tornam-se essenciais para identificar padrões e tendências que possam orientar investimentos e estratégias de mercado.</p>
 </div>
 <div class="fragment">
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<table class="caption-top">
+<table>
 <thead>
 <tr class="header">
 <th style="text-align: left;">ticker</th>
@@ -383,43 +382,81 @@
 <p>O presente trabalho busca fazer uma clusterização de séries temporais de diversas criptomoedas presentes no mercado.</p>
 </div>
 </section>
-<section id="motivação" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
-<h2><span style="color: orange;">MOTIVAÇÃO</span></h2>
+<section id="objetivos" class="slide level2 smaller">
+<h2><span style="color: orange;">OBJETIVOS</span></h2>
 <p>O principal objetivo deste estudo é:</p>
 <ul>
-<li class="fragment"><p>Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares</p></li>
-<li class="fragment"><p>Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas</p></li>
-<li class="fragment"><p>Realizar uma análise descritiva final dos resultados dos modelos preditivos</p></li>
+<li class="fragment"><p>Clusterizar as séries temporais das criptomoedas, segmentando-as em clusters que agrupam séries com comportamentos similares (tendências e sazonalidade);</p></li>
+<li class="fragment"><p>Estudar a relação entre os clusters;</p></li>
+<li class="fragment"><p>Realizar uma análise descritiva final dos resultados;</p></li>
 </ul>
 </section>
-<section id="metodologia" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
+<section id="metodologia" class="slide level2 smaller">
 <h2><span style="color: orange;">METODOLOGIA</span></h2>
 <ul>
-<li class="fragment"><p>Escolha de uma base de dados com intervalos de tempo parecidos</p></li>
-<li class="fragment"><p>Seleção da janela temporal (24/05/2022 até 22/11/2024)</p></li>
-<li class="fragment"><p>Aplicação do algoritmo <span style="color: orange;"><strong><em>k-means</em></strong></span> para dividir as séries temporais das criptomoedas em 5 clusters</p></li>
-<li class="fragment"><p>Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster</p></li>
-<li class="fragment"><p>Aplicação dos modelos <span style="color: orange;">ARIMA e ARMA</span> às séries representativas</p></li>
-<li class="fragment"><p>Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster</p></li>
+<li class="fragment"><p>Dados coletados do Kaggle de um banco de dados gerados por método de Web Scrapping <a href="https://www.kaggle.com/datasets/debashish311601/intraday-cryptocurrency-prices">Link</a></p></li>
+<li class="fragment"><p>Dados diários</p></li>
+<li class="fragment"><p>Aplicação do algoritmo <span style="color: orange;"><strong><em>k-means</em></strong></span> para dividir as séries temporais das criptomoedas;</p></li>
+<li class="fragment"><p>Aplicação de algoritmo de Dynamic Time Warping para calcular a distância intra cluster;</p></li>
+<li class="fragment"><p>Cálculo do centroide Dynamic Time Warping Barycenter Averaging;</p></li>
 </ul>
 </section>
-<section id="resultados" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
-<h2><span style="color: orange;">RESULTADOS</span></h2>
-<div class="columns">
-<div class="column" style="width:33%;">
-<p>write_xlsx(tabela_medias, “tabela_medias.xlsx”)</p>
-</div><div class="column" style="width:33%;">
-
-</div><div class="column" style="width:33%;">
-<p>dsadsadasdsada</p>
-</div></div>
+<section id="desafios" class="slide level2 smaller">
+<h2><span style="color: orange;">DESAFIOS</span></h2>
+<ul>
+<li class="fragment"><p>Pressuposto para clusterização de séries temporais: Mesma dimensão</p></li>
+<li class="fragment"><p><em>Solução</em>: A série foi definida pela moeda mais recente 24/05/2022 até dia 22/11/2024;</p></li>
+<li class="fragment"><p>Outliers: Bitcoin</p></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../graficos/series_barato.png" style="width:40.0%"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../graficos/series_caro_barato.png" style="width:40.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="conclusões" class="slide level2 smaller" data-background-image="fundo.png" data-background-opacity="0.5">
-<h2><span style="color: orange;">CONCLUSÕES</span></h2>
-<div class="quarto-auto-generated-content">
+<section id="clusterização-k-means-para-series-temporais" class="slide level2 smaller">
+<h2><span style="color: orange;">CLUSTERIZAÇÃO K-MEANS PARA SERIES TEMPORAIS</span></h2>
+<ul>
+<li class="fragment"><p>Método de agrupamento que divide os dados k clusters, minimizando a variação interna dos clusters;</p></li>
+<li class="fragment"><p>Tipicamente utilizado em dados não temporais aplicando como parametro a distância euclidiana.</p></li>
+</ul>
+<p><strong>Aplicação em séries temporais</strong></p>
+<ul>
+<li class="fragment"><p>Agrupa séries de comportamentos semelhantes considerando dependência temporal e padrões sazonais;</p></li>
+<li class="fragment"><p>O método kmeans tradicional não é ideal, pois não considera seguências temporais e suas altas taxas de multicolinearidade;</p></li>
+<li class="fragment"><p><strong>Dynamic Time Warping (DTW )</strong>: Amplamente utilizado em análise de séries temporais porque permite alinhar duas sequências não-lineares de maneira flexível.</p></li>
+</ul>
+</section>
+<section id="resultados" class="slide level2 smaller">
+<h2><span style="color: orange;">RESULTADOS</span></h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="../graficos/g_moeda_cluster.png" width="777"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="graficos/g_moeda_cluster.png"></p>
+<figcaption>figura</figcaption>
+</figure>
+</div>
 <div class="footer footer-default">
 <p>Desafio FGV - Datacapixaba</p>
-</div>
 </div>
 </section>
     </div>
@@ -448,6 +485,7 @@
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
+'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -633,80 +671,42 @@
       });
     </script>
     
-
     <script>
-
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
       // slide changes (different for each slide format).
-
       (function () {
-
         // dispatch for htmlwidgets
-
         function fireSlideEnter() {
-
           const event = window.document.createEvent("Event");
-
           event.initEvent("slideenter", true, true);
-
           window.document.dispatchEvent(event);
-
         }
-
-    
 
         function fireSlideChanged(previousSlide, currentSlide) {
-
           fireSlideEnter();
 
-    
-
           // dispatch for shiny
-
           if (window.jQuery) {
-
             if (previousSlide) {
-
               window.jQuery(previousSlide).trigger("hidden");
-
             }
-
             if (currentSlide) {
-
               window.jQuery(currentSlide).trigger("shown");
-
             }
-
           }
-
         }
-
-    
 
         // hookup for slidy
-
         if (window.w3c_slidy) {
-
           window.w3c_slidy.add_observer(function (slide_num) {
-
             // slide_num starts at position 1
-
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
           });
-
         }
 
-    
-
       })();
-
     </script>
-
-    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -740,7 +740,18 @@
         }
         return false;
       }
-      const onCopySuccess = function(e) {
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -772,50 +783,11 @@
         }, 1000);
         // clear code selection
         e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
       });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        // For code content inside modals, clipBoardJS needs to be initialized with a container option
-        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
-            }
-          }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      function tippyHover(el, contentFn) {
         const config = {
           allowHTML: true,
+          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -825,17 +797,8 @@
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start',
+          placement: 'bottom-start'
         };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -849,11 +812,7 @@
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
-          }
+          return note.innerHTML;
         });
       }
       const findCites = (el) => {

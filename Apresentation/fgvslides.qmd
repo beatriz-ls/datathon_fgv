@@ -2,12 +2,15 @@
 title: ""
 subtitle: ""
 institute: ""
+output:
+  nature:
+    ratio: "16:9"
 format: 
   revealjs:
     css: mycss.css
     incremental: true 
     footer: "Desafio FGV - Datacapixaba"
-    theme: league
+    theme: default
     cssVariables:
       --main-title-color: orange
     transition: slide
@@ -17,7 +20,7 @@ format:
       data-background-position: center
 ---
 
-```{r}
+```{r libraries, warning=FALSE, echo=FALSE, include = TRUE}
 library(tidyverse)
 library(gt)
 library(readxl)
@@ -27,13 +30,19 @@ library(lubridate)
 library(ggplot2)
 library(writexl)
 library(knitr)
-theme_set(theme_minimal())
+
+
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.align = "center",
+                      message = FALSE,
+                      warning = FALSE,
+                      include = TRUE)
 
 ```
 
 ##  {background-image="Capa.jpg" background-size="93%" background-color="white"}
 
-## [ INTRODUÇÃO ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
+## [ MOTIVAÇÃO ]{style="color: orange;"} {.smaller }
 
 . . .
 
@@ -41,8 +50,8 @@ Com o aumento da complexidade e da quantidade de dados disponíveis acerca das c
 
 
 . . .
-```{r}
-dt <- readRDS("C:/Users/gabri/Documents/datathon_fgv/Codes/short_data.rds")
+```{r descritiva}
+dt <- readRDS("~/datathon_fgv/Codes/short_data.rds")
 
 #-------- obter o número de observações por moeda no decorrer dos anos
 
@@ -69,47 +78,68 @@ O presente trabalho busca fazer uma clusterização de séries temporais de dive
 
 
 
-## [ MOTIVAÇÃO ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
+## [ OBJETIVOS ]{style="color: orange;"} {.smaller }
 
 O principal objetivo deste estudo é:
 
--   Clusterizar as séries temporais das criptomoedas, segmentando-as em 5 clusters que agrupam séries com comportamentos similares
+-   Clusterizar as séries temporais das criptomoedas, segmentando-as em clusters que agrupam séries com comportamentos similares (tendências e sazonalidade);
 
--   Criar séries temporais representativas para cada cluster por meio da média simples das séries agrupadas
+- Estudar a relação entre os clusters;
 
-
-
--   Realizar uma análise descritiva final dos resultados dos modelos preditivos
-
-## [ METODOLOGIA ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
-
--   Escolha de uma base de dados com intervalos de tempo parecidos
-
--   Seleção da janela temporal (24/05/2022 até 22/11/2024)
-
--   Aplicação do algoritmo [***k-means***]{style="color: orange;"} para dividir as séries temporais das criptomoedas em 5 clusters
-
--   Para cada cluster, será criada uma série temporal representativa através da média simples das séries pertencentes ao cluster
-
--   Aplicação dos modelos [ARIMA e ARMA]{style="color: orange;"} às séries representativas
-
--   Utilização do Teste de Dickey-Fuller Aumentado para verificar a estacionariedade e decidir qual modelo se adequa melhor a cada cluster
-
-## [ RESULTADOS ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
-
-:::::: columns
-::: {.column width="33%"}
-write_xlsx(tabela_medias, "tabela_medias.xlsx")
-:::
-
-::: {.column width="33%"}
-
-:::
+- Realizar uma análise descritiva final dos resultados;
 
 
-::: {.column width="33%"}
-dsadsadasdsada
-:::
-::::::
+## [ METODOLOGIA ]{style="color: orange;"} {.smaller }
 
-## [ CONCLUSÕES ]{style="color: orange;"} {.smaller background-image="fundo.png" background-opacity="0.5"}
+- Dados coletados do Kaggle de um banco de dados gerados por método de Web Scrapping [Link](https://www.kaggle.com/datasets/debashish311601/intraday-cryptocurrency-prices)
+
+- Dados diários
+
+- Aplicação do algoritmo [***k-means***]{style="color: orange;"} para dividir as séries temporais das criptomoedas;
+
+- Aplicação de algoritmo de Dynamic Time Warping para calcular a distância intra cluster;
+
+- Cálculo do centroide Dynamic Time Warping Barycenter Averaging;
+
+
+## [ DESAFIOS ]{style="color: orange;"} {.smaller }
+
+- Pressuposto para clusterização de séries temporais: Mesma dimensão
+
+- *Solução*: A série foi definida pela moeda mais recente 24/05/2022 até dia 22/11/2024;
+
+- Outliers: Bitcoin
+
+```{r figure, warning=FALSE, echo=FALSE, fig.align='center', fig.show='hold', out.width = '40%'}
+
+
+knitr::include_graphics(c("~/datathon_fgv/graficos/series_barato.png","~/datathon_fgv/graficos/series_caro_barato.png"))
+
+```
+
+## [ CLUSTERIZAÇÃO K-MEANS PARA SERIES TEMPORAIS]{style="color: orange;"} {.smaller }
+
+- Método de agrupamento que divide os dados k clusters, minimizando a variação interna dos clusters;
+
+- Tipicamente utilizado em dados não temporais aplicando como parametro a distância euclidiana.
+
+**Aplicação em séries temporais**
+
+- Agrupa séries de comportamentos semelhantes considerando dependência temporal e padrões sazonais;
+
+- O método kmeans tradicional não é ideal, pois não considera seguências temporais e suas altas taxas de multicolinearidade;
+
+- **Dynamic Time Warping (DTW )**: Amplamente utilizado em análise de séries temporais porque permite alinhar duas sequências não-lineares de maneira flexível.
+
+## [RESULTADOS]{style="color: orange;"} {.smaller }
+
+
+```{r figure 2, warning=FALSE, echo=FALSE, fig.align='center'}
+
+
+knitr::include_graphics("~/datathon_fgv/graficos/g_moeda_cluster.png")
+
+```
+
+![figura](graficos/g_moeda_cluster.png)
+
