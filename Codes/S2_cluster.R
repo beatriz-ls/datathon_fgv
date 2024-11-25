@@ -195,8 +195,8 @@ g_moeda_cluster <- ggplot(moeda_cluster, aes(x = factor(cluster), y = ticker)) +
   theme_minimal() +
   theme(
     axis.text.y = element_blank(),
-    legend.title = element_text(size = 2), # Ajusta o tamanho do título da legenda
-    legend.text = element_text(size = 25)   # Ajusta o tamanho do texto na legenda
+    legend.title = element_text(size = 4), # Ajusta o tamanho do título da legenda
+    legend.text = element_text(size = 4)   # Ajusta o tamanho do texto na legenda
         )
 
 ggsave("graficos/g_moeda_cluster.png", plot = g_moeda_cluster)
